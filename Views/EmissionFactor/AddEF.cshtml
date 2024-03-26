@@ -1,0 +1,85 @@
+﻿@model EmissionFactorTask_3pmetrics.Models.EmissionFactors
+
+<h1>Emission Factors</h1>
+
+<h4>Add Emission Factor</h4>
+<hr />
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddEF">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="emissionFactor" class="control-label">Emission Factor:</label>
+                <input type="text" asp-for="emissionFactor" class="form-control" />
+                <span asp-validation-for="emissionFactor" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="emissionFactorTittle" class="control-label">Emission Factor Tittle:</label>
+                <select asp-for="emissionFactorTittle" asp-items="@ViewBag.EmissionTitles"></select>
+            </div>
+           
+            <div>
+                <label asp-for="effectiveStartDate" class="control-label">Start Date:</label>
+                <input type="datetime-local" asp-for="effectiveStartDate" class="form-control" />
+            </div>
+
+            <div>
+                <label asp-for="effectiveEndDate" class="control-label">End Date:</label>
+                <input type="datetime-local" asp-for="effectiveEndDate" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>
+
+
+<h2>Emission Factors</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Emission Factor</th>
+            <th>Emission Tittle</th>
+            @*<th>Catalog id</th>*@
+            <th>Effective Start Date</th>
+            <th>Effective End Date</th>
+            <th>Creation Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.EF)
+        {
+            <tr>
+                <td>@item.emissionFactor</td>
+                <td>@item.emissionFactorTittle</td>
+                <td>@item.effectiveStartDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.effectiveEndDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.creationDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>
+                    <form method="post" asp-action="Delete" asp-controller="EmissionFactor">
+                        <input type="hidden" name="Id" value="@item.id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
